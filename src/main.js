@@ -46,9 +46,17 @@ const allFilters = [
     disabled: false
   }
 ];
-let filterElement;
+const dataStorage = {
+  types: [`repeat`, `deadline`, ``],
+  colors: [`black`, `pink`, `yellow`, `blue`, `red`],
+  descriptions: [
+    `Kek`,
+    `Lol`,
+    `Arbidol`,
+  ],
+};
+const card = [];
 let cardElement;
-let currentCount;
 
 const getRandomElement = (array) => {
   return array[Math.floor(Math.random() * array.length)];
@@ -61,9 +69,7 @@ const addElement = (parent, currentElement) => {
 const filterRender = (id, count, checked = false, disabled = false) => {
   const input = `<input type="radio" id="filter__${id}" class="filter__input visually-hidden" ${disabled && `disabled`} name="filter" ${checked && `checked`}/>`;
   const label = `<label for="filter__${id}" class="filter__label">${id} <span class="filter__${id}-count">${count}</span></label>`;
-
-  filterElement = `${input} ${label}`;
-  return filterElement;
+  return `${input} ${label}`;
 };
 
 const createFilterElement = (parent, id, count, checked, disabled) => {
@@ -72,9 +78,9 @@ const createFilterElement = (parent, id, count, checked, disabled) => {
 };
 
 const createAllFilters = (array) => {
-  array.forEach(function (el) {
+  for (let el of array) {
     createFilterElement(filter, el.id, el.count, el.checked, el.disabled);
-  });
+  }
 };
 
 createAllFilters(allFilters);
@@ -363,17 +369,9 @@ const cardRender = (data) => {
 };
 
 const createCardData = (count) => {
-  const dataStorage = {
-    types: [`repeat`, `deadline`, ``],
-    colors: [`black`, `pink`, `yellow`, `blue`, `red`],
-    descriptions: [
-      `Kek`,
-      `Lol`,
-      `Arbidol`,
-    ],
-  };
-  const card = [];
-
+  if (card.length !== 0) {
+    card.length = 0;
+  }
   for (let i = 0; i < count; i++) {
     card.push({
       type: getRandomElement(dataStorage.types),
@@ -390,9 +388,9 @@ const createCardElement = (parent, data) => {
 };
 
 const createAllCards = (array) => {
-  array.forEach(function (el) {
+  for (let el of array) {
     createCardElement(boardTasks, el);
-  });
+  }
 };
 
 const clearBlock = (block) => {
@@ -401,11 +399,20 @@ const clearBlock = (block) => {
 
 const filterLabel = document.querySelectorAll(`.filter__label`);
 
-filterLabel.forEach(function (element) {
-  element.addEventListener(`click`, function (e) {
-    currentCount = e.target.querySelector(`span`).textContent;
-    clearBlock(boardTasks);
-    let currentDataArray = createCardData(currentCount);
-    createAllCards(currentDataArray);
+for (let el of filterLabel) {
+  el.addEventListener(`click`, function (e) {
+    let currentCount = e.target.querySelector(`span`).textContent;
+    if (typeof Number(currentCount) === `number`) {
+      clearBlock(boardTasks);
+      let currentDataArray = createCardData(currentCount);
+      createAllCards(currentDataArray);
+    }
   });
-});
+}
+
+for (let el of allFilters) {
+  if (el.count === 7) {
+    let currentDataArray = createCardData(el.count);
+    createAllCards(currentDataArray);
+  }
+}
