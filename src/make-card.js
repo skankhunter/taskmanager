@@ -1,5 +1,5 @@
 export default (taskData) => {
-  const cardElement = `
+  return `
   <article class="card card--${taskData.color} ${taskData.type ? `card--${taskData.type}` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
@@ -28,7 +28,7 @@ export default (taskData) => {
               class="card__text"
               placeholder="Start typing your text here..."
               name="text"
-            >${taskData.description}</textarea>
+            >${taskData.title}</textarea>
           </label>
         </div>
         <div class="card__settings">
@@ -277,6 +277,4 @@ export default (taskData) => {
       </div>
     </form>
   </article>`;
-
-  return cardElement;
-}
+};

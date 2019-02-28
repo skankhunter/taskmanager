@@ -1,62 +1,10 @@
 import filterRender from './filter-render.js';
 import cardRender from './make-card.js';
+import {task, allFilters} from './data.js';
 
 const filter = document.querySelector(`.main__filter`);
-
 const boardTasks = document.querySelector(`.board__tasks`);
-const allFilters = [
-  {
-    id: `all`,
-    count: 3,
-    checked: true,
-    disabled: false
-  },
-  {
-    id: `overdue`,
-    count: 5,
-    checked: false,
-    disabled: false
-  },
-  {
-    id: `today`,
-    count: 3,
-    checked: false,
-    disabled: false
-  },
-  {
-    id: `favorites`,
-    count: 2,
-    checked: false,
-    disabled: false
-  },
-  {
-    id: `repeating`,
-    count: 7,
-    checked: false,
-    disabled: false
-  },
-  {
-    id: `tags`,
-    count: 2,
-    checked: false,
-    disabled: true
-  },
-  {
-    id: `archive`,
-    count: 3,
-    checked: false,
-    disabled: false
-  }
-];
-const dataStorage = {
-  types: [`repeat`, `deadline`, ``],
-  colors: [`black`, `pink`, `yellow`, `blue`, `red`],
-  descriptions: [
-    `Kek`,
-    `Lol`,
-    `Arbidol`,
-  ],
-};
+
 const startCardsCount = 7;
 
 const getRandomElement = (array) => {
@@ -80,17 +28,22 @@ const createAllFilters = (array) => {
 
 createAllFilters(allFilters);
 
-const createCardData = (count, currentData) => {
-  const data = [];
+const createCardData = (count, data) => {
+  const tasks = [];
 
   for (let i = 0; i < count; i++) {
-    data.push({
-      type: getRandomElement(currentData.types),
-      color: getRandomElement(currentData.colors),
-      description: getRandomElement(currentData.descriptions),
+    tasks.push({
+      title: getRandomElement(data.title),
+      tags: getRandomElement(data.tags),
+      picture: data.picture,
+      repeatingDays: data.repeatingDays,
+      type: getRandomElement(data.types),
+      color: getRandomElement(data.colors),
+      isFavorite: data.isFavorite,
+      isDone: data.isDone,
     });
   }
-  return data;
+  return tasks;
 };
 
 const createCardElement = (parent, data) => {
@@ -112,7 +65,7 @@ const filterInput = document.querySelectorAll(`.filter__input`);
 
 const createNewCards = (count) => {
   if (typeof (count) === `number`) {
-    const currentDataArray = createCardData(count, dataStorage);
+    const currentDataArray = createCardData(count, task);
     createAllCards(currentDataArray);
   }
 };
