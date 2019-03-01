@@ -34,7 +34,7 @@ const createCardData = (count, data) => {
   for (let i = 0; i < count; i++) {
     tasks.push({
       title: getRandomElement(data.title),
-      tags: getRandomElement(data.tags),
+      tags: data.getHashtags(),
       picture: data.picture,
       repeatingDays: data.repeatingDays,
       type: getRandomElement(data.types),

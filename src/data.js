@@ -1,3 +1,7 @@
+function getRandomNum() {
+  return Math.floor(Math.random() * 5);
+}
+
 const task = {
   title: [
     `Изучить теорию`,
@@ -28,6 +32,28 @@ const task = {
   colors: [`black`, `pink`, `yellow`, `blue`, `red`],
   isFavorite: false,
   isDone: false,
+  getHashtags() {
+    let tags = [];
+    const setArrayTags = [...this.tags];
+    for (let i = 0; i < 3; i++) {
+      const el = setArrayTags[getRandomNum()];
+      tags.push(el);
+    }
+    return tags.map((el) => `<span class="card__hashtag-inner">
+                  <input
+                    type="hidden"
+                    name="hashtag"
+                    value="repeat"
+                    class="card__hashtag-hidden-input"
+                  />
+                  <button type="button" class="card__hashtag-name">
+                    #${el}
+                  </button>
+                  <button type="button" class="card__hashtag-delete">
+                    delete
+                  </button>
+                </span>`).join(``);
+  }
 };
 
 const allFilters = [
