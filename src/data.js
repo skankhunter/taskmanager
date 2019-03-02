@@ -1,6 +1,8 @@
-function getRandomNum() {
-  return Math.floor(Math.random() * 5);
-}
+const getRandomNum = (count) => {
+  return Math.floor(Math.random() * count);
+};
+
+const tagsCountMax = 3;
 
 const task = {
   title: [
@@ -18,7 +20,9 @@ const task = {
     `intensive`,
     `kek`
   ]),
-  picture: `//picsum.photos/100/100?r=${Math.random()}`,
+  getPicture() {
+    return `//picsum.photos/100/100?r=${Math.random()}`;
+  },
   repeatingDays: {
     'mo': true,
     'tu': false,
@@ -35,8 +39,8 @@ const task = {
   getHashtags() {
     let tags = [];
     const setArrayTags = [...this.tags];
-    for (let i = 0; i < 3; i++) {
-      const el = setArrayTags[getRandomNum()];
+    for (let i = 0; i < tagsCountMax; i++) {
+      const el = setArrayTags[getRandomNum(setArrayTags.length)];
       tags.push(el);
     }
     return tags.map((el) => `<span class="card__hashtag-inner">
