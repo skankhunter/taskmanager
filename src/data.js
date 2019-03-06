@@ -2,6 +2,10 @@ const getRandomNum = (count) => {
   return Math.floor(Math.random() * count);
 };
 
+const getRandomElement = (array) => {
+  return array[Math.floor(Math.random() * array.length)];
+};
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -110,4 +114,32 @@ const task = {
   }
 };
 
-export {task, allFilters};
+const createPointData = (count, data) => {
+  const newCards = [];
+  for (let i = 0; i <= count; i++) {
+    newCards.push({
+      title: getRandomElement(data.title),
+      tags: data.hashtags,
+      picture: data.picture,
+      repeatingDays: data.repeatingDays,
+      type: getRandomElement(data.types),
+      color: getRandomElement(data.colors),
+      isFavorite: data.isFavorite,
+      isDone: data.isDone,
+    });
+  }
+  return newCards;
+};
+
+
+const generateData = () => {
+  const cards = {};
+  for (const el of allFilters) {
+    cards[`${el.id}`] = createPointData(el.count, task);
+  }
+  return cards;
+};
+
+const cards = generateData();
+
+export {cards, allFilters};

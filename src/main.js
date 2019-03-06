@@ -1,15 +1,11 @@
 import filterRender from './filter-render.js';
 import cardRender from './make-card.js';
-import {task, allFilters} from './data.js';
+import {cards, allFilters} from './data.js';
 
 const filter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
 
-const startCardsCount = 7;
-
-const getRandomElement = (array) => {
-  return array[Math.floor(Math.random() * array.length)];
-};
+const startFilter = cards.all;
 
 const addElement = (parent, currentElement) => {
   parent.insertAdjacentHTML(`beforeEnd`, currentElement);
@@ -28,24 +24,6 @@ const createAllFilters = (array) => {
 
 createAllFilters(allFilters);
 
-const createCardData = (count, data) => {
-  const tasks = [];
-
-  for (let i = 0; i < count; i++) {
-    tasks.push({
-      title: getRandomElement(data.title),
-      tags: data.hashtags,
-      picture: data.picture,
-      repeatingDays: data.repeatingDays,
-      type: getRandomElement(data.types),
-      color: getRandomElement(data.colors),
-      isFavorite: data.isFavorite,
-      isDone: data.isDone,
-    });
-  }
-  return tasks;
-};
-
 const createCardElement = (parent, data) => {
   let currentCard = cardRender(data);
   addElement(parent, currentCard);
@@ -63,20 +41,23 @@ const clearBlock = (block) => {
 
 const filterInput = document.querySelectorAll(`.filter__input`);
 
-const createNewCards = (count) => {
-  if (typeof (count) === `number`) {
-    const currentDataArray = createCardData(count, task);
-    createAllCards(currentDataArray);
-  }
+
+const getCurrentFilter = (target) => {
+  const currentId = target.getAttribute(`id`);
+  return currentId.split(`__`)[1];
+};
+
+const renderCards = (target, data) => {
+  const filterTarget = getCurrentFilter(target);
+  createAllCards(data[`${filterTarget}`]);
 };
 
 for (const el of filterInput) {
   el.addEventListener(`change`, function (e) {
-    const currentLabel = e.target.nextElementSibling;
-    const currentCount = Number(currentLabel.querySelector(`span`).textContent);
+    const target = e.target;
     clearBlock(boardTasks);
-    createNewCards(currentCount);
+    renderCards(target, cards);
   });
 }
 
-createNewCards(startCardsCount);
+createAllCards(startFilter);
