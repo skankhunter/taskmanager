@@ -1,6 +1,7 @@
-import filterRender from './filter-render.js';
-import cardRender from './make-card.js';
+import filterRender from './rendering/filter-render.js';
 import {cards, allFilters} from './data.js';
+import Task from "./task/task";
+import TaskEdit from "./task/task-edit";
 
 const filter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
@@ -9,6 +10,10 @@ const startFilter = cards.all;
 
 const addElement = (parent, currentElement) => {
   parent.insertAdjacentHTML(`beforeEnd`, currentElement);
+};
+
+const addTask = (parent, currentElement) => {
+  parent.appendChild(currentElement.render());
 };
 
 const createFilterElement = (parent, id, count, checked, disabled) => {
@@ -25,8 +30,21 @@ const createAllFilters = (array) => {
 createAllFilters(allFilters);
 
 const createCardElement = (parent, data) => {
-  let currentCard = cardRender(data);
-  addElement(parent, currentCard);
+
+  const taskComponent = new Task(data);
+  const editTaskComponent = new TaskEdit(data);
+  taskComponent.onEdit = () => {
+    editTaskComponent.render();
+    boardTasks.replaceChild(editTaskComponent.element, taskComponent.element);
+    taskComponent.unrender();
+  };
+
+  editTaskComponent.onSubmit = () => {
+    taskComponent.render();
+    boardTasks.replaceChild(taskComponent.element, editTaskComponent.element);
+    editTaskComponent.unrender();
+  };
+  addTask(parent, taskComponent);
 };
 
 const createAllCards = (array) => {
