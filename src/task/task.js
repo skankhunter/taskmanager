@@ -1,7 +1,8 @@
-import {createElement} from "../helpers/сreate-element";
+import TaskComponent from "../components/TaskComponent";
 
-class Task {
+class Task extends TaskComponent {
   constructor(data) {
+    super();
     this._title = data.title;
     this._dueDate = data.dueDate;
     this._tags = data.tags;
@@ -12,11 +13,7 @@ class Task {
     this._isFavorite = data.isFavorite;
     this._isDone = data.isDone;
 
-    this._element = null;
-    this._state = {
-      isEdit: false
-    };
-
+    this._onEdit = null;
     this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
   _isRepeated() {
@@ -27,10 +24,6 @@ class Task {
     if (typeof this._onEdit === `function`) {
       this._onEdit();
     }
-  }
-
-  get element() {
-    return this._element;
   }
 
   set onEdit(fn) {
@@ -166,19 +159,8 @@ class Task {
     this._element.addEventListener(`click`, this._onEditButtonClick);
   }
 
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-    return this._element;
-  }
-
   unbind() {
     this._element.removeEventListener(`click`, this._onEditButtonClick);
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
   }
 }
 

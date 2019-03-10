@@ -1,7 +1,9 @@
 import {createElement} from "../helpers/сreate-element";
+import TaskComponent from "../components/TaskComponent";
 
-class TaskEdit {
+class TaskEdit extends TaskComponent {
   constructor(data) {
+    super();
     this._title = data.title;
     this._dueDate = data.dueDate;
     this._tags = data.tags;
@@ -12,7 +14,6 @@ class TaskEdit {
     this._isFavorite = data.isFavorite;
     this._isDone = data.isDone;
 
-    this._element = null;
     this._onSubmit = null;
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
   }
@@ -29,10 +30,6 @@ class TaskEdit {
 
   set onSubmit(fn) {
     this._onSubmit = fn;
-  }
-
-  get element() {
-    return this._element;
   }
 
   get template() {
@@ -160,17 +157,6 @@ class TaskEdit {
     </article>`.trim();
   }
 
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-    return this._element;
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
-  }
-
   bind() {
     this._element.addEventListener(`submit`, this._onSubmitButtonClick);
   }
@@ -178,7 +164,6 @@ class TaskEdit {
   unbind() {
     this._element.removeEventListener(`submit`, this._onSubmitButtonClick);
   }
-
 }
 
 export default TaskEdit;

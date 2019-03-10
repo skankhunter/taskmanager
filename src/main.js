@@ -30,20 +30,20 @@ const createAllFilters = (array) => {
 createAllFilters(allFilters);
 
 const createCardElement = (parent, data) => {
-  const taskComponent = new Task(data);
-  const editTaskComponent = new TaskEdit(data);
-  taskComponent.onEdit = () => {
-    editTaskComponent.render();
-    boardTasks.replaceChild(editTaskComponent.element, taskComponent.element);
-    taskComponent.unrender();
+  const task = new Task(data);
+  const taskEdit = new TaskEdit(data);
+  task.onEdit = () => {
+    taskEdit.render();
+    boardTasks.replaceChild(taskEdit.element, task.element);
+    task.unrender();
   };
 
-  editTaskComponent.onSubmit = () => {
-    taskComponent.render();
-    boardTasks.replaceChild(taskComponent.element, editTaskComponent.element);
-    editTaskComponent.unrender();
+  taskEdit.onSubmit = () => {
+    task.render();
+    boardTasks.replaceChild(task.element, taskEdit.element);
+    taskEdit.unrender();
   };
-  addTask(parent, taskComponent);
+  addTask(parent, task);
 };
 
 const createAllCards = (array) => {
