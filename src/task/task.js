@@ -16,13 +16,17 @@ class Task {
     this._state = {
       isEdit: false
     };
+
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
   _isRepeated() {
-    return Object.values(this._repeatingDays).some(it => it === true);
+    return Object.values(this._repeatingDays).some((it) => it === true);
   }
 
   _onEditButtonClick() {
-    typeof this._onEdit === `function` && this._onEdit();
+    if (typeof this._onEdit === `function`) {
+      this._onEdit();
+    }
   }
 
   get element() {
@@ -159,8 +163,7 @@ class Task {
   }
 
   bind() {
-    this._element.querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+    this._element.addEventListener(`click`, this._onEditButtonClick);
   }
 
   render() {
@@ -170,7 +173,7 @@ class Task {
   }
 
   unbind() {
-    // Удаление обработчиков
+    this._element.removeEventListener(`click`, this._onEditButtonClick);
   }
 
   unrender() {

@@ -30,7 +30,6 @@ const createAllFilters = (array) => {
 createAllFilters(allFilters);
 
 const createCardElement = (parent, data) => {
-
   const taskComponent = new Task(data);
   const editTaskComponent = new TaskEdit(data);
   taskComponent.onEdit = () => {
