@@ -2,6 +2,7 @@ import {getRandomElement} from "./helpers";
 
 export const createCardData = (count, data) => {
   const newCards = [];
+
   for (let i = 0; i < count; i++) {
     newCards.push({
       title: getRandomElement(data.title),

@@ -38,7 +38,14 @@ const createCardElement = (parent, data) => {
     task.unrender();
   };
 
-  taskEdit.onSubmit = () => {
+  taskEdit.onSubmit = (newObject) => {
+    task.title = newObject.title;
+    task.tags = newObject.tags;
+    task.color = newObject.color;
+    task.repeatingDays = newObject.repeatingDays;
+    task.dueDate = newObject.dueDate;
+
+    task.update(task);
     task.render();
     boardTasks.replaceChild(task.element, taskEdit.element);
     taskEdit.unrender();
@@ -57,7 +64,6 @@ const clearBlock = (block) => {
 };
 
 const filterInput = document.querySelectorAll(`.filter__input`);
-
 
 const getCurrentFilter = (target) => {
   const currentId = target.getAttribute(`id`);

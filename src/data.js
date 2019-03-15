@@ -66,16 +66,16 @@ const task = {
     return `//picsum.photos/100/100?r=${Math.random()}`;
   },
   repeatingDays: {
-    'mo': true,
+    'mo': false,
     'tu': false,
-    'we': true,
+    'we': false,
     'th': false,
     'fr': false,
-    'sa': true,
+    'sa': false,
     'su': false,
   },
   types: [`repeat`, `deadline`, ``],
-  colors: [`black`, `pink`, `yellow`, `blue`, `red`],
+  colors: [`black`, `pink`, `yellow`, `blue`, `red`, `green`],
   isFavorite: false,
   isDone: false,
   get hashtags() {
