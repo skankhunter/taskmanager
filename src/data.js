@@ -66,7 +66,7 @@ const task = {
     return `//picsum.photos/100/100?r=${Math.random()}`;
   },
   repeatingDays: {
-    'mo': false,
+    'mo': true,
     'tu': false,
     'we': false,
     'th': false,
