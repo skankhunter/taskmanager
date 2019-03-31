@@ -77,7 +77,7 @@ const task = {
     'su': false,
   },
   types: [`repeat`, `deadline`, ``],
-  colors: [`black`, `pink`, `yellow`, `blue`, `red`, `green`],
+  colors: [`black`, `pink`, `yellow`, `blue`, `green`],
   isFavorite: false,
   isDone: false,
   get hashtags() {
