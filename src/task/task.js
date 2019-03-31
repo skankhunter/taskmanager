@@ -3,6 +3,7 @@ import TaskComponent from "../components/TaskComponent";
 class Task extends TaskComponent {
   constructor(data) {
     super();
+    this._token = data.token;
     this._title = data.title;
     this._dueDate = data.dueDate;
     this._tags = data.tags;

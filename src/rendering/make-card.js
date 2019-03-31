@@ -138,50 +138,7 @@ export default (taskData) => {
             </div>
             <div class="card__hashtag">
               <div class="card__hashtag-list">
-                <!--<span class="card__hashtag-inner">-->
-                  <!--<input-->
-                    <!--type="hidden"-->
-                    <!--name="hashtag"-->
-                    <!--value="repeat"-->
-                    <!--class="card__hashtag-hidden-input"-->
-                  <!--/>-->
-                  <!--<button type="button" class="card__hashtag-name">-->
-                    <!--#repeat-->
-                  <!--</button>-->
-                  <!--<button type="button" class="card__hashtag-delete">-->
-                    <!--delete-->
-                  <!--</button>-->
-                <!--</span>-->
-                <!--<span class="card__hashtag-inner">-->
-                  <!--<input-->
-                    <!--type="hidden"-->
-                    <!--name="hashtag"-->
-                    <!--value="repeat"-->
-                    <!--class="card__hashtag-hidden-input"-->
-                  <!--/>-->
-                  <!--<button type="button" class="card__hashtag-name">-->
-                    <!--#cinema-->
-                  <!--</button>-->
-                  <!--<button type="button" class="card__hashtag-delete">-->
-                    <!--delete-->
-                  <!--</button>-->
-                <!--</span>-->
-                <!--<span class="card__hashtag-inner">-->
-                  <!--<input-->
-                    <!--type="hidden"-->
-                    <!--name="hashtag"-->
-                    <!--value="repeat"-->
-                    <!--class="card__hashtag-hidden-input"-->
-                  <!--/>-->
-                  <!--<button type="button" class="card__hashtag-name">-->
-                    <!--#entertaiment-->
-                  <!--</button>-->
-                  <!--<button type="button" class="card__hashtag-delete">-->
-                    <!--delete-->
-                  <!--</button>-->
-                <!--</span>-->
-              <!--</div>-->
-              ${taskData.tags}
+                ${taskData.tags}
               <label>
                 <input
                   type="text"

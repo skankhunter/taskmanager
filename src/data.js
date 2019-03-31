@@ -46,6 +46,8 @@ const allFilters = [
   }
 ];
 
+const tasksCount = getRandomNum(15);
+
 const task = {
   title: [
     `Изучить теорию`,
@@ -66,7 +68,7 @@ const task = {
     return `//picsum.photos/100/100?r=${Math.random()}`;
   },
   repeatingDays: {
-    'mo': true,
+    'mo': false,
     'tu': false,
     'we': false,
     'th': false,
@@ -87,11 +89,7 @@ const task = {
 };
 
 const generateData = () => {
-  const cards = {};
-  for (const el of allFilters) {
-    cards[`${el.id}`] = createCardData(el.count, task);
-  }
-  return cards;
+  return createCardData(tasksCount, task);
 };
 
 const cards = generateData();

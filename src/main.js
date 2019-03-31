@@ -1,33 +1,83 @@
 import filterRender from './rendering/filter-render.js';
 import {cards, allFilters} from './data.js';
+import Filter from './components/Filter';
 import Task from "./task/task";
 import TaskEdit from "./task/task-edit";
+import moment from 'moment';
+import flatpickr from 'flatpickr';
+import Chart from 'chart.js';
 
-const filter = document.querySelector(`.main__filter`);
+const FILTERS_TYPES = [
+  `all`,
+  `overdue`,
+  `today`,
+  `favorites`,
+  `repeating`,
+  `tags`,
+  `archive`
+];
+
+const filtersContainer = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
 
-const startFilter = cards.all;
-
-const addElement = (parent, currentElement) => {
-  parent.insertAdjacentHTML(`beforeEnd`, currentElement);
-};
+let startCards = cards;
 
 const addTask = (parent, currentElement) => {
   parent.appendChild(currentElement.render());
 };
 
-const createFilterElement = (parent, id, count, checked, disabled) => {
-  let currentFilter = filterRender(id, count, checked, disabled);
-  addElement(parent, currentFilter);
-};
+const filterTasks = (filterName) => {
+  let result = startCards;
 
-const createAllFilters = (array) => {
-  for (let el of array) {
-    createFilterElement(filter, el.id, el.count, el.checked, el.disabled);
+  switch (filterName) {
+    case `overdue`:
+      result = startCards.filter((it) => it.dueDate < Date.now());
+      break;
+    case `today`:
+      result = startCards.filter((it) => moment(it.dueDate).format(`DD`) === moment(Date.now()).format(`DD`));
+      break;
+    case `favorites`:
+      result = startCards.filter((it) => it.isFavorite);
+      break;
+    case `repeating`:
+      result = startCards.filter((it) => it.isRepeated);
+      break;
+    case `tags`:
+      result = startCards.filter((it) => [...it.tags].length > 0);
+      break;
+    case `archive`:
+      result = startCards.filter((it) => it.isDone);
+      break;
   }
+
+  return result;
 };
 
-createAllFilters(allFilters);
+const updateFiltersList = () => {
+  // filtersList.forEach((it) => {
+  //   it.update(filterTasks(it.type).length);
+  //
+  //   const oldFilter = it.element;
+  //   it.unrender();
+  //   filtersContainer.replaceChild(it.render(), oldFilter);
+  // });
+  clearBlock(filtersContainer);
+  renderFiltersList(
+      createFiltersList()
+  );
+};
+
+const createFilter = (filterType) => {
+  const filter = new Filter(filterType, filterTasks(filterType).length);
+
+  filter.onFilter = () => {
+    const filteredTasks = filterTasks(filterType);
+    clearBlock(boardTasks);
+    createAllCards(filteredTasks);
+  };
+
+  return filter;
+};
 
 const createCardElement = (parent, data) => {
   const task = new Task(data);
@@ -50,7 +100,31 @@ const createCardElement = (parent, data) => {
     boardTasks.replaceChild(task.element, taskEdit.element);
     taskEdit.unrender();
   };
+
+  taskEdit.onEsc = (initialObject) => {
+    task.color = initialObject.color;
+
+    taskEdit._state.isDate = false;
+    taskEdit._state.isRepeated = false;
+
+    taskEdit.update(initialObject);
+    task.render();
+    boardTasks.replaceChild(task.element, taskEdit.element);
+    taskEdit.unrender();
+  };
+
+  taskEdit.onDelete = () => {
+    deleteTask(taskEdit);
+    boardTasks.removeChild(taskEdit.element);
+    taskEdit.unrender();
+    updateFiltersList();
+  };
+
   addTask(parent, task);
+};
+
+const deleteTask = (task) => {
+  startCards = startCards.filter((point) => point.token !== task._token);
 };
 
 const createAllCards = (array) => {
@@ -63,24 +137,38 @@ const clearBlock = (block) => {
   block.innerHTML = ``;
 };
 
-const filterInput = document.querySelectorAll(`.filter__input`);
+createAllCards(startCards);
 
-const getCurrentFilter = (target) => {
-  const currentId = target.getAttribute(`id`);
-  return currentId.split(`__`)[1];
-};
+const createFiltersList = () => FILTERS_TYPES.map((it) => createFilter(it));
+const renderFilter = (filter) => filtersContainer.appendChild(filter.render());
+const renderFiltersList = (filtersList) => filtersList.forEach((it) => renderFilter(it));
 
-const renderCards = (target, data) => {
-  const filterTarget = getCurrentFilter(target);
-  createAllCards(data[`${filterTarget}`]);
-};
+const filtersList = createFiltersList();
 
-for (const el of filterInput) {
-  el.addEventListener(`change`, function (e) {
-    const target = e.target;
-    clearBlock(boardTasks);
-    renderCards(target, cards);
-  });
-}
+renderFiltersList(filtersList);
 
-createAllCards(startFilter);
+
+//
+//
+// const HIDDEN_CLASS = `visually-hidden`;
+//
+// const closeAllContainer = () => allContainers.forEach((it) => it.classList.add(HIDDEN_CLASS));
+//
+// const tasksBtn = document.querySelector(`#control__task`);
+// const statisticsBtn = document.querySelector(`#control__statistic`);
+//
+// const taskContainer = document.querySelector(`.board.container`);
+// const statisticContainer = document.querySelector(`.statistic.container`);
+//
+// const allContainers = [taskContainer, statisticContainer];
+//
+// tasksBtn.addEventListener(`click`, () => {
+//   closeAllContainer();
+//   taskContainer.classList.remove(HIDDEN_CLASS);
+// });
+//
+// statisticsBtn.addEventListener(`click`, () => {
+//   closeAllContainer();
+//   statisticContainer.classList.remove(HIDDEN_CLASS);
+//   // updateCharts();
+// });
