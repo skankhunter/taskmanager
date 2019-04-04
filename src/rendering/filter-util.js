@@ -1,8 +1,6 @@
-//TODO: improve for TASK 8
-import Filter from './filter';
-import {tasksList, renderTasksList} from './task-util';
+import Filter from '../components/Filter';
+import {renderTasksList, tasksList} from "../task/task-creation";
 import moment from 'moment';
-import {cards} from "../data";
 
 const FILTERS_TYPES = [
   `all`,
@@ -14,7 +12,7 @@ const FILTERS_TYPES = [
   `archive`
 ];
 
-const tasksContainer = document.querySelector(`.board__tasks`);
+const boardTasks = document.querySelector(`.board__tasks`);
 const filtersContainer = document.querySelector(`.main__filter`);
 filtersContainer.innerHTML = ``;
 
@@ -45,27 +43,28 @@ const filterTasks = (filterName) => {
   return result;
 };
 
-const updateFiltersList = () => {
-  filtersList.forEach((it) => {
-    it.update(filterTasks(it._type).length);
+const clearBlock = (block) => {
+  block.innerHTML = ``;
+};
 
-    const oldFilter = it.element;
-    it.unrender();
-    filtersContainer.replaceChild(it.render(), oldFilter);
-  });
+const updateFiltersList = () => {
+  clearBlock(filtersContainer);
+  renderFiltersList(
+      createFiltersList()
+  );
 };
 
 const createFilter = (filterType) => {
   const filter = new Filter(filterType, filterTasks(filterType).length);
 
   filter.onFilter = () => {
-    const filteredTasks = filterTasks(filterType);
-    clearBlock(boardTasks);
-    createAllCards(filteredTasks, cards);
+    boardTasks.innerHTML = ``;
+    renderTasksList(filterTasks(filterType));
   };
 
   return filter;
 };
+
 
 const createFiltersList = () => FILTERS_TYPES.map((it) => createFilter(it));
 

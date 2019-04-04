@@ -3,7 +3,7 @@ import TaskComponent from "../components/TaskComponent";
 class Task extends TaskComponent {
   constructor(data) {
     super();
-    this._token = data.token;
+    this._id = data.id;
     this._title = data.title;
     this._dueDate = data.dueDate;
     this._tags = data.tags;
@@ -30,6 +30,35 @@ class Task extends TaskComponent {
 
   set onEdit(fn) {
     this._onEdit = fn;
+  }
+
+  createListeners() {
+    this._element.addEventListener(`click`, this._onEditButtonClick);
+  }
+
+  removeListeners() {
+    this._element.removeEventListener(`click`, this._onEditButtonClick);
+  }
+
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._repeatingDays = data.repeatingDays;
+  }
+
+  toRAW() {
+    return {
+      'id': this._id,
+      'title': this._title,
+      'due_date': this._dueDate,
+      'tags': [...this._tags.values()],
+      'picture': this._picture,
+      'repeating_days': this._repeatingDays,
+      'color': this._color,
+      'is_favorite': this._isFavorite,
+      'is_done': this._isDone,
+    };
   }
 
   get template() {
@@ -90,21 +119,6 @@ class Task extends TaskComponent {
       </div>
     </form>
   </article>`.trim();
-  }
-
-  createListeners() {
-    this._element.addEventListener(`click`, this._onEditButtonClick);
-  }
-
-  removeListeners() {
-    this._element.removeEventListener(`click`, this._onEditButtonClick);
-  }
-
-  update(data) {
-    this._title = data.title;
-    this._tags = data.tags;
-    this._color = data.color;
-    this._repeatingDays = data.repeatingDays;
   }
 }
 

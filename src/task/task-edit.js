@@ -1,18 +1,19 @@
 import TaskComponent from "../components/TaskComponent";
 import flatpickr from "flatpickr";
 import moment from "moment";
-import {createElement} from "../helpers/сreate-element";
 
 class TaskEdit extends TaskComponent {
   constructor(data) {
     super();
-    this._token = data.token;
+    this._id = data.id;
     this._title = data.title;
     this._dueDate = data.dueDate;
     this._tags = data.tags;
     this._picture = data.picture;
     this._repeatingDays = data.repeatingDays;
     this._color = data.color;
+    this._isFavorite = data.isFavorite;
+
     this._element = null;
     this._initData = Object.assign(data);
 
@@ -232,7 +233,7 @@ class TaskEdit extends TaskComponent {
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">edit</button>
             <button type="button" class="card__btn card__btn--archive">archive</button>
-            <button type="button" class="card__btn card__btn--favorites card__btn--disabled">favorites</button>
+            <button type="button" class="card__btn card__btn--favorites ${this._isFavorite ? `` : `card__btn--disabled`}">favorites</button>
           </div>
     
           <div class="card__color-bar">
