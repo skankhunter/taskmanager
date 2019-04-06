@@ -1,5 +1,6 @@
-import {updateCharts} from "./rendering/chart";
 import {filtersList, renderFiltersList} from "./rendering/filter-util";
+import {} from './task/task-creation';
+import {updateCharts} from "./rendering/chart";
 
 renderFiltersList(filtersList);
 

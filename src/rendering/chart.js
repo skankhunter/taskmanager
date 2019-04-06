@@ -1,4 +1,4 @@
-// import {tasksList} from "../task/task-creation";
+import {tasksList} from "../task/task-creation";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -7,40 +7,9 @@ const colorsCtx = document.querySelector(`.statistic__colors`);
 
 const HIDDEN_CLASS = `visually-hidden`;
 
-// const taskContainer = document.querySelector(`.board.container`);
-// const statisticContainer = document.querySelector(`.statistic.container`);
-// const allContainers = [taskContainer, statisticContainer];
-
-// const closeAllContainer = () => allContainers.forEach((it) => it.classList.add(HIDDEN_CLASS));
-//
-// const tasksBtn = document.querySelector(`#control__task`);
-// const statisticsBtn = document.querySelector(`#control__statistic`);
-
 [`.statistic__tags-wrap`, `.statistic__colors-wrap`].forEach((it) => {
   document.querySelector(it).classList.remove(HIDDEN_CLASS);
 });
-
-// const openTasksContainer = () => {
-//   closeAllContainer();
-//   taskContainer.classList.remove(HIDDEN_CLASS);
-// };
-//
-// const openStatisticContainer = () => {
-//   closeAllContainer();
-//   statisticContainer.classList.remove(HIDDEN_CLASS);
-//   updateCharts();
-// };
-//
-// tasksBtn.addEventListener(`click`, openTasksContainer);
-// statisticsBtn.addEventListener(`click`, openStatisticContainer);
-
-const chartLabelFn = (tooltipItem, data) => {
-  const allData = data.datasets[tooltipItem.datasetIndex].data;
-  const tooltipData = allData[tooltipItem.index];
-  const total = allData.reduce((acc, it) => acc + parseFloat(it));
-  const tooltipPercentage = Math.round((tooltipData / total) * 100);
-  return `${data.labels[tooltipItem.index]}(${tooltipData}) — ${tooltipPercentage}%`;
-};
 
 const createDataChart = (data, titleText) => {
   return {
@@ -55,7 +24,13 @@ const createDataChart = (data, titleText) => {
       },
       tooltips: {
         callbacks: {
-          label: chartLabelFn
+          label: (tooltipItem, params) => {
+            const allData = params.datasets[tooltipItem.datasetIndex].data;
+            const tooltipData = allData[tooltipItem.index];
+            const total = allData.reduce((acc, it) => acc + parseFloat(it));
+            const tooltipPercentage = Math.round((tooltipData / total) * 100);
+            return `${tooltipData} TASKS — ${tooltipPercentage}%`;
+          }
         },
         displayColors: false,
         backgroundColor: `#ffffff`,
@@ -90,10 +65,10 @@ function getTasksTags() {
   const tags = {};
   const data = [];
 
-  for (let task of tasks) {
-    for (let tag of task.tags) {
+  for (let task of tasksList) {
+    for (let tag of task._tags) {
       if (!tags.hasOwnProperty(tag)) {
-        tags[`#` + tag] = 1;
+        tags[tag] = 1;
       } else {
         tags[tag]++;
       }
@@ -114,11 +89,11 @@ function getTasksColors() {
   const colors = {};
   const data = [];
 
-  for (let task of tasks) {
-    if (!colors.hasOwnProperty(task.color)) {
-      colors[task.color] = 1;
+  for (let task of tasksList) {
+    if (!colors.hasOwnProperty(task._color)) {
+      colors[task._color] = 1;
     } else {
-      colors[task.color]++;
+      colors[task._color]++;
     }
   }
 
@@ -133,30 +108,36 @@ function getTasksColors() {
 }
 
 const updateCharts = () => {
-  // const dataChartTasksColor = getTasksColors();
-  // const dataChartTasksTags = getTasksTags();
-  //
-  // chartTags.data.datasets[0].data = dataChartTasksTags.data;
-  // chartColors.data.datasets[0].data = dataChartTasksColor.data;
-  //
-  // chartTags.update();
-  // chartColors.update();
+  const dataChartTasksColor = getTasksColors();
+  const dataChartTasksTags = getTasksTags();
+
+  chartTags.data.datasets[0].data = dataChartTasksTags.data;
+  chartColors.data.datasets[0].data = dataChartTasksColor.data;
+
+  chartTags.data.labels = dataChartTasksTags.uniqTags;
+  chartColors.data.labels = dataChartTasksColor.uniqColors;
+
+  chartTags.update();
+  chartColors.update();
 };
 
-// const dataChartTasksTags = getTasksTags();
-// const dataChartTasksColors = getTasksColors();
-//
-// const chartTags = new Chart(tagsCtx, createDataChart({
-//   labels: dataChartTasksTags.labels,
-//   datasets: [{
-//     data: dataChartTasksTags.data,
-//     backgroundColor: [`#ff3cb9`, `#ffe125`, `#0c5cdd`, `#000000`, `#31b55c`]
-//   }]
-// }, `DONE BY: TAGS`));
-//
-// const chartColors = new Chart(colorsCtx, createDataChart({
-//   labels: dataChartTasksColors.labels,
-//   datasets: [dataChartTasksColors.datasets]
-// }, `DONE BY: COLORS`));
+const dataChartTasksTags = getTasksTags();
+const dataChartTasksColors = getTasksColors();
+
+const chartTags = new Chart(tagsCtx, createDataChart({
+  labels: dataChartTasksTags.uniqTags,
+  datasets: [{
+    data: dataChartTasksTags.data,
+    backgroundColor: [`#ff3cb9`, `#ffe125`, `#0c5cdd`, `#000000`, `#31b55c`]
+  }]
+}, `DONE BY: TAGS`));
+
+const chartColors = new Chart(colorsCtx, createDataChart({
+  labels: dataChartTasksColors.uniqColors,
+  datasets: [{
+    data: dataChartTasksColors.data,
+    backgroundColor: [`#ff3cb9`, `#ffe125`, `#0c5cdd`, `#000000`, `#31b55c`]
+  }]
+}, `DONE BY: COLORS`));
 
 export {updateCharts};
